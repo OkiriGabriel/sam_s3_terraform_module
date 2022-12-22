@@ -1,10 +1,11 @@
+
 #Create s3 bucket
 resource "aws_s3_bucket" "s3_default" {
 
 
-  bucket        = module.labels.id
+  bucket        = module.s3_bucket.bucket.id
   force_destroy = var.force_destroy
-  tags          = module.labels.tags
+  # tags          = module.labels.tags
 
   # dynamic "object_lock_configuration" {
   #   for_each = var.object_lock_configuration != null ? [1] : []
@@ -23,9 +24,7 @@ resource "aws_s3_bucket" "s3_default" {
 #   policy = var.aws_iam_policy_document
 # }
 
-
 #Enable bucket versioning
-
 resource "aws_s3_bucket_versioning" "example" {
   bucket = aws_s3_bucket.s3_default.id
   versioning_configuration {
@@ -53,20 +52,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
     }
   }
 }
-
-# locals {
-#   acl_grants = var.grants == null ? var.acl_grants : flatten(
-#     [
-#       for g in var.grants : [
-#         for p in g.permissions : {
-#           id         = g.id
-#           type       = g.type
-#           permission = p
-#           uri        = g.uri
-#         }
-#       ]
-#   ])
-# }
 
 resource "aws_s3_bucket_acl" "default" {
 
@@ -99,11 +84,6 @@ resource "aws_s3_bucket_acl" "default" {
     }
   }
 }
-
-# locals {
-#   attach_policy = var.attach_require_latest_tls_policy || var.attach_elb_log_delivery_policy || var.attach_lb_log_delivery_policy || var.attach_deny_insecure_transport_policy || var.attach_policy
-
-# }
 
 #tfsec:ignore:aws-s3-block-public-acls
 resource "aws_s3_bucket_public_access_block" "non_public_access" {
