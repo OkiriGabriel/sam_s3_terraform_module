@@ -16,7 +16,6 @@ resource "aws_s3_bucket" "s3_default" {
   # }
 }
 
-#
 #creates policy for S3 bucket on AWS
 # resource "aws_s3_bucket_policy" "s3_default" {
 
@@ -38,7 +37,6 @@ resource "aws_s3_bucket_logging" "example" {
   target_bucket = aws_s3_bucket.s3_default.id
   target_prefix = var.target_prefix
   count  = var.logging == true ? 1 : 0
-
 }
 
 #enable bucket server side encryption
